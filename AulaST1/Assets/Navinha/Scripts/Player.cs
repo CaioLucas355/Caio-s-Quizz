@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     [Header("Componentes")]
     public Rigidbody2D corpoPlayer;
     public BoxCollider2D colisorPlayer;
+    public Animator animatorPlayer;
 
 
     [Header("Movimentação")]
@@ -56,7 +57,24 @@ public class Player : MonoBehaviour
         {
             Atirar();
         }
-    
+
+        if (inputX != 0)
+        {
+            animatorPlayer.SetInteger("Player", 1);
+            if (inputX > 0)
+            {
+                transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else
+            {
+                transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+        else
+        {
+
+            animatorPlayer.SetInteger("Player", 0);
+        }
     }
 
     private void FixedUpdate()

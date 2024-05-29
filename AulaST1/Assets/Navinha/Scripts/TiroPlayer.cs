@@ -31,8 +31,13 @@ public class TiroPlayer : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Destroy(collision.gameObject);
-        Destroy(gameObject);
+        if (collision.gameObject.CompareTag("Alan"))
+        {
+            GameManager.Instancia.AlterarScore(10);
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        
     }
 
 

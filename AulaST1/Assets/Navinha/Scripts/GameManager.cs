@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instancia;
+
+    [Header("Pontuação")]
+    public int score;
+    public TMP_Text scoreText;
 
     [Header("Gerador de Alans")]
     public GameObject objetoAlan;
@@ -28,7 +34,11 @@ public class GameManager : MonoBehaviour
     {
         
     }
-
+    public void AlterarScore(int valor)
+    {
+        score += valor;
+        scoreText.text = "SCORE: " + score;
+    }
     IEnumerator GerarAlan()
     {
         int rnd = Random.Range(0, geradoresAlan.Length);
