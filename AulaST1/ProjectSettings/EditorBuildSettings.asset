@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Quizz/aula1.unity
-    guid: 64b58f1f85879354bb846b88395f56ba
+    path: Assets/Navinha/Cenas/JogoNavinha.unity
+    guid: 0d254847985f1e6418534e531ab2e2a8
   m_configObjects: {}

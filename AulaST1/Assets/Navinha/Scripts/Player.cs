@@ -27,6 +27,22 @@ public class Player : MonoBehaviour
     public GameObject tiroPlayer;
     public Transform miraPlayer;
 
+    [Header("Power Up")]
+    public Transform powerEsquerda;
+    public Transform powerDireita;
+    public GameObject tiroPowerUp;
+    public bool powerUp1Ativo;
+    public int powerUp2;
+    public float inputPowerUp2;
+    public List<Alan> alansAtivos;
+    public float taxaPower2;
+    public bool podePower2;
+
+    [Header("Vida Player")]
+    public int vidaMaxima;
+    public int vidaAtual;
+    public float taxaInvencivel;
+
     private void Awake()
     {
         instancia = this;
@@ -75,6 +91,14 @@ public class Player : MonoBehaviour
 
             animatorPlayer.SetInteger("Player", 0);
         }
+
+        inputPowerUp2 = Input.GetAxis("Fire2");
+        if(inputPowerUp2 != 0 && powerUp2 > 0 && podePower2)
+        {
+            StartCoroutine("Especial");
+        }
+
+
     }
 
     private void FixedUpdate()
@@ -94,7 +118,65 @@ public class Player : MonoBehaviour
     {
         podeAtirar = false;
         Instantiate(tiroPlayer, miraPlayer.position, Quaternion.identity); 
+        if (powerUp1Ativo)
+        {
+            Instantiate(tiroPowerUp, powerDireita.position, Quaternion.identity);
+            Instantiate(tiroPowerUp, powerEsquerda.position, Quaternion.identity);
+        }
+
         yield return new WaitForSeconds(TaxaTiro);
         podeAtirar = true;
+    }
+    IEnumerator Especial()
+    {
+        podePower2 = false;
+        foreach(Alan alan in alansAtivos) 
+        {
+            alan.DroparItem();
+            alansAtivos.Remove(alan);
+            Destroy(alan);
+            GameManager.Instancia.score += 10;
+        }
+        yield return new WaitForSeconds(taxaPower2);
+        podePower2 = true;
+    }
+    // colisão com Alan
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Alan"))
+        {
+            powerUp1Ativo = false;
+            collision.gameObject.GetComponent<Alan>().DroparItem();
+            alansAtivos.Remove(collision.gameObject.GetComponent<Alan>());
+            Destroy(collision.gameObject);
+            vidaAtual--;
+            if (vidaAtual <= 0)
+            {
+                GameManager.Instancia.GameOver();
+
+            }
+        }
+        if (collision.CompareTag("PowerUp"))
+        {
+            if(collision.gameObject.GetComponent<PowerUp>().tipo == 0 )
+            {
+                powerUp1Ativo = true;
+                Destroy(collision.gameObject);
+            }
+            if (collision.gameObject.GetComponent<PowerUp>().tipo == 1)
+            {
+                powerUp2++;
+                podePower2 = true;
+                Destroy(collision.gameObject);
+
+            }
+            if (collision.gameObject.GetComponent<PowerUp>().tipo == 2)
+            {
+                vidaMaxima++;
+                vidaAtual = vidaMaxima;
+                Destroy(collision.gameObject);
+
+            }
+        }   
     }
 }

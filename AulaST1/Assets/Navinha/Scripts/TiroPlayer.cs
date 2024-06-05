@@ -34,6 +34,8 @@ public class TiroPlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Alan"))
         {
             GameManager.Instancia.AlterarScore(10);
+            Player.instancia.alansAtivos.Remove(collision.gameObject.GetComponent<Alan>());
+            collision.gameObject.GetComponent<Alan>().DroparItem();
             Destroy(collision.gameObject);
             Destroy(gameObject);
         }
