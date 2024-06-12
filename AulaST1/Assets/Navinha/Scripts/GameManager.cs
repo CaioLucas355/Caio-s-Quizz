@@ -10,6 +10,12 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instancia;
 
+    [Header("Menu")]
+    public GameObject painelInicio;
+    public GameObject painelGameplay;
+    public GameObject painelGameover;
+
+
     [Header("Pontuação")]
     public int score;
     public TMP_Text scoreText;
@@ -27,9 +33,18 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(GerarAlan());
+        
+        painelInicio.SetActive(true);
+        painelGameplay.SetActive(false);
+        painelGameover.SetActive(false);
     }
 
+    public void IniciarJogo()
+    {
+        painelInicio.SetActive(false);
+        painelGameplay.SetActive(true);
+        StartCoroutine(GerarAlan());
+    }
     // Update is called once per frame
     void Update()
     {
@@ -49,6 +64,14 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        StartCoroutine(FinalizarJogo());
+        
+    }
+    IEnumerator FinalizarJogo() 
+    {
+        painelGameplay.SetActive(false );
+        painelGameover.SetActive(true);
+        yield return new WaitForSeconds(3);
         SceneManager.LoadScene(0);
     }
 
